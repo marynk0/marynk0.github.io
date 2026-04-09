@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mary Kamunya — Data Analyst</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --blue: #185FA5;
+    --blue-light: #E6F1FB;
+    --blue-dark: #0C447C;
+    --blue-mid: #378ADD;
+    --text: #111111;
+    --text-muted: #555555;
+    --text-subtle: #888888;
+    --border: #E5E7EB;
+    --bg: #ffffff;
+    --bg-surface: #F8F9FA;
+    --bg-dark: #0D1117;
+    --accent-teal: #1D9E75;
+    --accent-teal-light: #E1F5EE;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    font-size: 16px; line-height: 1.7;
+    color: var(--text); background: var(--bg);
+  }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 48px;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 60px;
+  }
+  .nav-logo { font-size: 15px; font-weight: 600; color: var(--text); text-decoration: none; }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a { font-size: 14px; color: var(--text-muted); text-decoration: none; transition: color .2s; }
+  .nav-links a:hover { color: var(--blue); }
+  .nav-cta {
+    font-size: 13px; font-weight: 500; color: var(--blue);
+    border: 1px solid var(--blue); border-radius: 6px;
+    padding: 7px 16px; text-decoration: none; transition: all .2s;
+  }
+  .nav-cta:hover { background: var(--blue); color: #fff; }
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+  .hamburger span { width: 22px; height: 2px; background: var(--text); border-radius: 2px; transition: all .3s; }
+
+  /* HERO */
+  .hero {
+    padding: 100px 48px 80px;
+    max-width: 1100px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 380px; gap: 80px; align-items: center;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--blue-light); color: var(--blue-dark);
+    font-size: 12px; font-weight: 500; padding: 5px 14px;
+    border-radius: 20px; margin-bottom: 24px;
+  }
+  .hero-badge-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent-teal); }
+  .hero h1 {
+    font-size: 48px; font-weight: 700; line-height: 1.15;
+    color: var(--text); margin-bottom: 20px;
+    letter-spacing: -0.5px;
+  }
+  .hero h1 span { color: var(--blue); }
+  .hero-sub {
+    font-size: 17px; color: var(--text-muted); line-height: 1.75;
+    max-width: 520px; margin-bottom: 36px;
+  }
+  .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--blue); color: #fff; font-size: 14px; font-weight: 500;
+    padding: 12px 24px; border-radius: 8px; text-decoration: none; transition: all .2s;
+    border: none; cursor: pointer;
+  }
+  .btn-primary:hover { background: var(--blue-dark); transform: translateY(-1px); }
+  .btn-outline {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: transparent; color: var(--text); font-size: 14px; font-weight: 500;
+    padding: 12px 24px; border-radius: 8px; border: 1px solid var(--border);
+    text-decoration: none; transition: all .2s;
+  }
+  .btn-outline:hover { border-color: var(--blue); color: var(--blue); }
+
+  /* HERO CARD */
+  .hero-card {
+    background: var(--bg-surface); border: 1px solid var(--border);
+    border-radius: 16px; padding: 28px; position: relative; overflow: hidden;
+  }
+  .hero-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--blue) 0%, var(--blue-mid) 50%, var(--accent-teal) 100%);
+  }
+  .hero-card-title { font-size: 11px; font-weight: 600; color: var(--text-subtle); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 20px; }
+  .metric-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .metric-item { }
+  .metric-num { font-size: 28px; font-weight: 700; color: var(--blue); line-height: 1; }
+  .metric-label { font-size: 12px; color: var(--text-muted); margin-top: 4px; line-height: 1.4; }
+  .hero-card-divider { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
+  .stack-label { font-size: 11px; font-weight: 600; color: var(--text-subtle); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
+  .stack-pills { display: flex; flex-wrap: wrap; gap: 6px; }
+  .stack-pill {
+    font-size: 11px; color: var(--blue-dark); background: var(--blue-light);
+    padding: 4px 10px; border-radius: 20px; font-weight: 500;
+  }
+
+  /* METRICS STRIP */
+  .metrics-strip {
+    border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    background: var(--bg-surface);
+  }
+  .metrics-inner {
+    max-width: 1100px; margin: 0 auto; padding: 0 48px;
+    display: grid; grid-template-columns: repeat(4, 1fr);
+  }
+  .metric-cell {
+    padding: 32px 24px; border-right: 1px solid var(--border); text-align: center;
+  }
+  .metric-cell:last-child { border-right: none; }
+  .metric-cell-num { font-size: 36px; font-weight: 700; color: var(--blue); }
+  .metric-cell-label { font-size: 13px; color: var(--text-muted); margin-top: 4px; line-height: 1.4; }
+
+  /* SECTIONS */
+  section { padding: 80px 48px; }
+  .section-inner { max-width: 1100px; margin: 0 auto; }
+  .section-eyebrow { font-size: 11px; font-weight: 600; color: var(--blue); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 12px; }
+  .section-title { font-size: 32px; font-weight: 700; color: var(--text); margin-bottom: 16px; letter-spacing: -0.3px; }
+  .section-sub { font-size: 16px; color: var(--text-muted); max-width: 560px; line-height: 1.7; margin-bottom: 48px; }
+
+  /* PROJECTS */
+  #projects { background: var(--bg); border-top: 1px solid var(--border); }
+  .projects-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .project-card {
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: 14px; padding: 28px;
+    transition: border-color .2s, transform .2s; position: relative; overflow: hidden;
+  }
+  .project-card:hover { border-color: var(--blue-mid); transform: translateY(-2px); }
+  .project-card-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 16px; }
+  .project-icon {
+    width: 44px; height: 44px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center; font-size: 22px;
+    flex-shrink: 0;
+  }
+  .project-card h3 { font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 10px; }
+  .project-card p { font-size: 14px; color: var(--text-muted); line-height: 1.65; margin-bottom: 18px; }
+  .project-impact {
+    display: inline-block; font-size: 12px; font-weight: 600;
+    color: var(--blue-dark); background: var(--blue-light);
+    padding: 5px 12px; border-radius: 20px; margin-bottom: 14px;
+  }
+  .project-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .project-tag {
+    font-size: 11px; color: var(--text-muted);
+    border: 1px solid var(--border); background: var(--bg-surface);
+    padding: 3px 9px; border-radius: 4px;
+  }
+
+  /* SKILLS */
+  #skills { background: var(--bg-surface); border-top: 1px solid var(--border); }
+  .skills-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .skill-card {
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: 12px; padding: 22px;
+  }
+  .skill-card h4 { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 14px; }
+  .skill-pills { display: flex; flex-wrap: wrap; gap: 7px; }
+  .skill-pill {
+    font-size: 12px; color: var(--text-muted);
+    background: var(--bg-surface); border: 1px solid var(--border);
+    padding: 4px 11px; border-radius: 20px;
+  }
+
+  /* EXPERIENCE */
+  #experience { background: var(--bg); border-top: 1px solid var(--border); }
+  .exp-list { display: flex; flex-direction: column; gap: 0; }
+  .exp-item {
+    display: grid; grid-template-columns: 200px 1fr;
+    gap: 40px; padding: 36px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .exp-item:first-child { padding-top: 0; }
+  .exp-item:last-child { border-bottom: none; }
+  .exp-meta { }
+  .exp-date { font-size: 13px; color: var(--text-subtle); margin-bottom: 6px; }
+  .exp-co-badge {
+    display: inline-block; font-size: 11px; font-weight: 600; color: var(--accent-teal);
+    background: var(--accent-teal-light); padding: 3px 10px; border-radius: 20px;
+  }
+  .exp-content { }
+  .exp-role { font-size: 18px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+  .exp-company { font-size: 14px; color: var(--blue); margin-bottom: 16px; }
+  .exp-bullets { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .exp-bullets li {
+    font-size: 14px; color: var(--text-muted); line-height: 1.65;
+    padding-left: 18px; position: relative;
+  }
+  .exp-bullets li::before { content: '▸'; position: absolute; left: 0; color: var(--blue); font-size: 11px; top: 4px; }
+
+  /* WRITING */
+  #writing { background: var(--bg-surface); border-top: 1px solid var(--border); }
+  .writing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .writing-card {
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: 12px; padding: 22px;
+    text-decoration: none; display: block; transition: border-color .2s;
+  }
+  .writing-card:hover { border-color: var(--blue-mid); }
+  .writing-tag { font-size: 11px; font-weight: 600; color: var(--blue); margin-bottom: 10px; display: block; }
+  .writing-card h4 { font-size: 15px; font-weight: 600; color: var(--text); line-height: 1.4; margin-bottom: 10px; }
+  .writing-card p { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+  .writing-arrow { font-size: 13px; color: var(--blue); margin-top: 14px; display: block; }
+
+  /* CONTACT */
+  #contact {
+    background: var(--bg-dark); border-top: 1px solid var(--border);
+    padding: 80px 48px;
+  }
+  .contact-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 400px; gap: 80px; align-items: start; }
+  .contact-left h2 { font-size: 36px; font-weight: 700; color: #fff; margin-bottom: 16px; letter-spacing: -0.3px; }
+  .contact-left p { font-size: 16px; color: #8B949E; line-height: 1.7; margin-bottom: 28px; }
+  .contact-availability {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(29,158,117,0.15); color: #3DD68C;
+    font-size: 13px; font-weight: 500; padding: 7px 14px; border-radius: 20px;
+  }
+  .avail-dot { width: 7px; height: 7px; border-radius: 50%; background: #3DD68C; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
+  .contact-links { display: flex; flex-direction: column; gap: 12px; }
+  .contact-link {
+    display: flex; align-items: center; gap: 14px;
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px; padding: 16px 20px; text-decoration: none;
+    transition: border-color .2s, background .2s;
+  }
+  .contact-link:hover { border-color: rgba(255,255,255,0.25); background: rgba(255,255,255,0.08); }
+  .contact-link-icon {
+    width: 36px; height: 36px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; flex-shrink: 0;
+  }
+  .contact-link-text { }
+  .contact-link-label { font-size: 11px; color: #8B949E; display: block; margin-bottom: 2px; }
+  .contact-link-value { font-size: 14px; color: #fff; }
+
+  /* FOOTER */
+  footer {
+    background: var(--bg-dark); border-top: 1px solid rgba(255,255,255,0.08);
+    padding: 24px 48px;
+  }
+  .footer-inner { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+  .footer-text { font-size: 13px; color: #8B949E; }
+  .footer-right { display: flex; gap: 20px; }
+  .footer-right a { font-size: 13px; color: #8B949E; text-decoration: none; transition: color .2s; }
+  .footer-right a:hover { color: #fff; }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    nav { padding: 0 24px; }
+    .nav-links, .nav-cta { display: none; }
+    .hamburger { display: flex; }
+    .hero { grid-template-columns: 1fr; gap: 40px; padding: 60px 24px 48px; }
+    .hero h1 { font-size: 34px; }
+    .hero-card { display: none; }
+    .metrics-inner { grid-template-columns: repeat(2,1fr); padding: 0 24px; }
+    .metric-cell:nth-child(2) { border-right: none; }
+    section { padding: 56px 24px; }
+    .projects-grid, .skills-grid, .writing-grid { grid-template-columns: 1fr; }
+    .exp-item { grid-template-columns: 1fr; gap: 8px; }
+    .contact-inner { grid-template-columns: 1fr; gap: 40px; }
+    #contact { padding: 56px 24px; }
+    footer { padding: 20px 24px; }
+    .footer-inner { flex-direction: column; gap: 12px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">Mary Kamunya</a>
+  <ul class="nav-links">
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#writing">Writing</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="mailto:maryj.kamunya2@gmail.com" class="nav-cta">Hire me</a>
+  <div class="hamburger" onclick="this.classList.toggle('open')">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div>
+    <div class="hero-badge">
+      <div class="hero-badge-dot"></div>
+      Open to remote worldwide
+    </div>
+    <h1>Turning messy data<br>into <span>clear decisions</span></h1>
+    <p class="hero-sub">
+      Data Analyst & Analytics Engineer with 3+ years building ETL pipelines, geospatial fleet tracking, and executive dashboards that drive real operational outcomes across logistics and distribution.
+    </p>
+    <div class="hero-btns">
+      <a href="#projects" class="btn-primary">View my work</a>
+      <a href="#contact" class="btn-outline">Get in touch</a>
+    </div>
+  </div>
+  <div class="hero-card">
+    <div class="hero-card-title">Impact at a glance</div>
+    <div class="metric-grid">
+      <div class="metric-item">
+        <div class="metric-num">20%</div>
+        <div class="metric-label">Reduction in order cycle time</div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-num">25%</div>
+        <div class="metric-label">Fewer stockouts via depletion model</div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-num">15%</div>
+        <div class="metric-label">Fleet utilization improvement</div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-num">10%</div>
+        <div class="metric-label">Gross profit increase</div>
+      </div>
+    </div>
+    <hr class="hero-card-divider">
+    <div class="stack-label">Core stack</div>
+    <div class="stack-pills">
+      <span class="stack-pill">PostgreSQL</span>
+      <span class="stack-pill">PostGIS</span>
+      <span class="stack-pill">Python</span>
+      <span class="stack-pill">Apache NiFi</span>
+      <span class="stack-pill">Power BI</span>
+      <span class="stack-pill">Superset</span>
+    </div>
+  </div>
+</div>
+
+<!-- METRICS STRIP -->
+<div class="metrics-strip">
+  <div class="metrics-inner">
+    <div class="metric-cell">
+      <div class="metric-cell-num">3+</div>
+      <div class="metric-cell-label">Years of production analytics experience</div>
+    </div>
+    <div class="metric-cell">
+      <div class="metric-cell-num">5+</div>
+      <div class="metric-cell-label">End-to-end data pipelines built & maintained</div>
+    </div>
+    <div class="metric-cell">
+      <div class="metric-cell-num">100%</div>
+      <div class="metric-cell-label">Data integrity across all warehouse pipelines</div>
+    </div>
+    <div class="metric-cell">
+      <div class="metric-cell-num">20%</div>
+      <div class="metric-cell-label">Decision-making efficiency improvement</div>
+    </div>
+  </div>
+</div>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-inner">
+    <div class="section-eyebrow">Selected projects</div>
+    <h2 class="section-title">Work that moved the needle</h2>
+    <p class="section-sub">Real projects, real data, real results — built at a logistics company running distribution across Kenya.</p>
+    <div class="projects-grid">
+
+      <div class="project-card">
+        <div class="project-card-top">
+          <div class="project-icon" style="background:#E6F1FB;">🚛</div>
+        </div>
+        <h3>Fleet Geofencing & API Integration</h3>
+        <p>Built token-authenticated REST API pipelines from Fleetio into PostgreSQL, then implemented PostGIS geofencing to monitor truck entry/exit across warehouse zones and market routes in real time.</p>
+        <div class="project-impact">15% fleet utilization · 20% less untracked mileage</div>
+        <div class="project-tags">
+          <span class="project-tag">PostGIS</span>
+          <span class="project-tag">REST API</span>
+          <span class="project-tag">PostgreSQL</span>
+          <span class="project-tag">Apache NiFi</span>
+          <span class="project-tag">Fleetio</span>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-card-top">
+          <div class="project-icon" style="background:#EAF3DE;">📦</div>
+        </div>
+        <h3>Inventory Run-Rate & Depletion Model</h3>
+        <p>Forecasted days-to-stockout per SKU using historical sales velocity. Gave procurement teams 5–7 days of advance warning before critical stock levels, enabling proactive reordering decisions.</p>
+        <div class="project-impact">25% reduction in stockouts</div>
+        <div class="project-tags">
+          <span class="project-tag">Python</span>
+          <span class="project-tag">pandas</span>
+          <span class="project-tag">SQL</span>
+          <span class="project-tag">Power BI</span>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-card-top">
+          <div class="project-icon" style="background:#FAEEDA;">📊</div>
+        </div>
+        <h3>Real-Time Sales Performance Scorecard</h3>
+        <p>Built a live KPI dashboard in Apache Superset tracking sales rep performance, product mix, and branch revenue vs targets. Enabled pricing decisions that directly lifted gross profit margins.</p>
+        <div class="project-impact">15% rep performance · 10% gross profit increase</div>
+        <div class="project-tags">
+          <span class="project-tag">Apache Superset</span>
+          <span class="project-tag">Power BI</span>
+          <span class="project-tag">DAX</span>
+          <span class="project-tag">SQL CTEs</span>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-card-top">
+          <div class="project-icon" style="background:#E1F5EE;">⏱</div>
+        </div>
+        <h3>Order Cycle Time Monitoring</h3>
+        <p>End-to-end order lifecycle tracking across warehouse processing and last-mile delivery stages. Surfaced the specific handoff points causing delays, driving a 20% reduction in average cycle time.</p>
+        <div class="project-impact">20% cycle time reduction</div>
+        <div class="project-tags">
+          <span class="project-tag">PostgreSQL</span>
+          <span class="project-tag">Window functions</span>
+          <span class="project-tag">NiFi</span>
+          <span class="project-tag">Superset</span>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-card-top">
+          <div class="project-icon" style="background:#FBEAF0;">📞</div>
+        </div>
+        <h3>Call Centre & Customer Analytics</h3>
+        <p>Developed dashboards tracking successful calls, resolution rates, and agent productivity. Added RFM customer segmentation to identify high-value customers and churn risk patterns.</p>
+        <div class="project-impact">20% call resolution efficiency improvement</div>
+        <div class="project-tags">
+          <span class="project-tag">SQL</span>
+          <span class="project-tag">RFM analysis</span>
+          <span class="project-tag">Power BI</span>
+          <span class="project-tag">Python</span>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-card-top">
+          <div class="project-icon" style="background:#F1EFE8;">🏭</div>
+        </div>
+        <h3>ETL Pipeline — Acumatica ERP to PostgreSQL</h3>
+        <p>Built automated ETL pipelines using Apache NiFi to extract ERP data via OData with incremental loading. Designed the PostgreSQL data warehouse with optimized SQL and upsert/validation logic.</p>
+        <div class="project-impact">100% data integrity · Fully automated pipeline</div>
+        <div class="project-tags">
+          <span class="project-tag">Apache NiFi</span>
+          <span class="project-tag">OData API</span>
+          <span class="project-tag">PostgreSQL</span>
+          <span class="project-tag">Acumatica ERP</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-inner">
+    <div class="section-eyebrow">Technical skills</div>
+    <h2 class="section-title">The full stack</h2>
+    <p class="section-sub">From raw ERP extraction to polished executive dashboards — I own the entire analytics pipeline.</p>
+    <div class="skills-grid">
+      <div class="skill-card">
+        <h4>SQL & Databases</h4>
+        <div class="skill-pills">
+          <span class="skill-pill">PostgreSQL</span>
+          <span class="skill-pill">MySQL</span>
+          <span class="skill-pill">PostGIS</span>
+          <span class="skill-pill">CTEs</span>
+          <span class="skill-pill">Window functions</span>
+          <span class="skill-pill">Materialized views</span>
+          <span class="skill-pill">Upsert logic</span>
+          <span class="skill-pill">Query optimization</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <h4>Data Engineering</h4>
+        <div class="skill-pills">
+          <span class="skill-pill">Apache NiFi</span>
+          <span class="skill-pill">ETL / ELT</span>
+          <span class="skill-pill">Incremental loading</span>
+          <span class="skill-pill">REST APIs</span>
+          <span class="skill-pill">OData</span>
+          <span class="skill-pill">Data modeling</span>
+          <span class="skill-pill">Acumatica ERP</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <h4>Visualization</h4>
+        <div class="skill-pills">
+          <span class="skill-pill">Power BI</span>
+          <span class="skill-pill">Apache Superset</span>
+          <span class="skill-pill">Tableau</span>
+          <span class="skill-pill">Looker</span>
+          <span class="skill-pill">DAX</span>
+          <span class="skill-pill">Data modeling</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <h4>Programming</h4>
+        <div class="skill-pills">
+          <span class="skill-pill">Python</span>
+          <span class="skill-pill">pandas</span>
+          <span class="skill-pill">numpy</span>
+          <span class="skill-pill">Jupyter</span>
+          <span class="skill-pill">SQL scripting</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <h4>Operational analytics</h4>
+        <div class="skill-pills">
+          <span class="skill-pill">Fleet tracking</span>
+          <span class="skill-pill">Geospatial analysis</span>
+          <span class="skill-pill">Order lifecycle</span>
+          <span class="skill-pill">Inventory depletion</span>
+          <span class="skill-pill">RFM segmentation</span>
+          <span class="skill-pill">KPI dashboards</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <h4>Tools & soft skills</h4>
+        <div class="skill-pills">
+          <span class="skill-pill">pgAdmin</span>
+          <span class="skill-pill">Fleetio</span>
+          <span class="skill-pill">Excel</span>
+          <span class="skill-pill">Data documentation</span>
+          <span class="skill-pill">Stakeholder comms</span>
+          <span class="skill-pill">Async work</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-inner">
+    <div class="section-eyebrow">Experience</div>
+    <h2 class="section-title">Where I've worked</h2>
+    <div class="exp-list">
+
+      <div class="exp-item">
+        <div class="exp-meta">
+          <div class="exp-date">Jan 2023 – Present</div>
+          <br>
+          <span class="exp-co-badge">Full-time</span>
+        </div>
+        <div class="exp-content">
+          <div class="exp-role">Data Analyst</div>
+          <div class="exp-company">Gilanis Distributors Limited — Nairobi, Kenya</div>
+          <ul class="exp-bullets">
+            <li>Built token-authenticated REST API pipelines (Fleetio) and implemented PostGIS geofencing to monitor truck movement and warehouse activity — improving fleet utilization by 15% and reducing untracked mileage by 20%.</li>
+            <li>Designed operational dashboards tracking order volumes, fulfillment rates, on-time delivery, and branch TAT — contributing to a 20% reduction in average order cycle time.</li>
+            <li>Developed real-time Sales Scorecards in Apache Superset and GP margin dashboards in Power BI — improving sales rep performance by 15% and increasing gross profit by 10%.</li>
+            <li>Created inventory run-rate and days-to-depletion dashboards — reducing stockouts by 25% by giving procurement 5–7 days advance warning.</li>
+            <li>Built automated ETL pipelines using Apache NiFi (Acumatica OData) with incremental loading into a PostgreSQL data warehouse, ensuring 100% data integrity.</li>
+            <li>Documented all pipelines, KPI definitions, and dashboards — enabling self-service analytics and improving cross-team decision-making efficiency by 20%.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="exp-item">
+        <div class="exp-meta">
+          <div class="exp-date">2022</div>
+          <br>
+          <span class="exp-co-badge">Internship</span>
+        </div>
+        <div class="exp-content">
+          <div class="exp-role">Data Analytics Intern (Virtual)</div>
+          <div class="exp-company">KPMG</div>
+          <ul class="exp-bullets">
+            <li>Processed and analyzed large structured datasets in SQL and Excel for business intelligence reporting.</li>
+            <li>Built Tableau dashboards to monitor customer engagement and marketing performance, accelerating decision cycles.</li>
+            <li>Conducted regression analyses to uncover demand drivers and improve predictive accuracy.</li>
+            <li>Collaborated with senior analysts on supply-demand optimization reports.</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- WRITING -->
+<section id="writing">
+  <div class="section-inner">
+    <div class="section-eyebrow">Writing</div>
+    <h2 class="section-title">Thinking out loud</h2>
+    <p class="section-sub">I write about the data problems I actually solve — pipelines, dashboards, and operational analytics in the real world.</p>
+    <div class="writing-grid">
+      <a href="https://medium.com/@maryj.kamunya2" target="_blank" class="writing-card">
+        <span class="writing-tag">Data Engineering</span>
+        <h4>How I built a real-time fleet tracking pipeline with PostGIS and a REST API</h4>
+        <p>From token-authenticated Fleetio integration to geofence zones in PostgreSQL — the full story.</p>
+        <span class="writing-arrow">Read on Medium →</span>
+      </a>
+      <a href="https://medium.com/@maryj.kamunya2" target="_blank" class="writing-card">
+        <span class="writing-tag">Inventory Analytics</span>
+        <h4>Reducing stockouts by 25%: an inventory depletion model in PostgreSQL</h4>
+        <p>How I modeled days-to-stockout per SKU and got procurement ahead of the problem.</p>
+        <span class="writing-arrow">Read on Medium →</span>
+      </a>
+      <a href="https://medium.com/@maryj.kamunya2" target="_blank" class="writing-card">
+        <span class="writing-tag">ETL Pipelines</span>
+        <h4>My ETL setup with Apache NiFi and Acumatica OData</h4>
+        <p>Incremental loading, upsert logic, and how I keep 100% data integrity across a live warehouse.</p>
+        <span class="writing-arrow">Read on Medium →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" style="padding:0;">
+  <div class="contact-inner" style="max-width:1100px;margin:0 auto;padding:80px 48px;display:grid;grid-template-columns:1fr 400px;gap:80px;align-items:start;">
+    <div class="contact-left">
+      <h2>Let's work together</h2>
+      <p>I'm actively looking for remote Data Analyst, Analytics Engineer, and Data Engineering roles. I work well async, document everything, and communicate clearly across teams and timezones.</p>
+      <div class="contact-availability">
+        <div class="avail-dot"></div>
+        Available for remote roles — worldwide
+      </div>
+    </div>
+    <div class="contact-links">
+      <a href="mailto:maryj.kamunya2@gmail.com" class="contact-link">
+        <div class="contact-link-icon" style="background:rgba(24,95,165,0.2);">✉</div>
+        <div class="contact-link-text">
+          <span class="contact-link-label">Email</span>
+          <span class="contact-link-value">maryj.kamunya2@gmail.com</span>
+        </div>
+      </a>
+      <a href="https://linkedin.com/in/mary-kamunya" target="_blank" class="contact-link">
+        <div class="contact-link-icon" style="background:rgba(24,95,165,0.2);">in</div>
+        <div class="contact-link-text">
+          <span class="contact-link-label">LinkedIn</span>
+          <span class="contact-link-value">linkedin.com/in/mary-kamunya</span>
+        </div>
+      </a>
+      <a href="https://github.com/marynk0" target="_blank" class="contact-link">
+        <div class="contact-link-icon" style="background:rgba(255,255,255,0.1);">gh</div>
+        <div class="contact-link-text">
+          <span class="contact-link-label">GitHub</span>
+          <span class="contact-link-value">github.com/marynk0</span>
+        </div>
+      </a>
+      <a href="https://medium.com/@maryj.kamunya2" target="_blank" class="contact-link">
+        <div class="contact-link-icon" style="background:rgba(255,255,255,0.1);">M</div>
+        <div class="contact-link-text">
+          <span class="contact-link-label">Medium</span>
+          <span class="contact-link-value">medium.com/@maryj.kamunya2</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <span class="footer-text">© 2026 Mary Nyambura Kamunya · Nairobi, Kenya</span>
+    <div class="footer-right">
+      <a href="#projects">Projects</a>
+      <a href="#skills">Skills</a>
+      <a href="#experience">Experience</a>
+      <a href="mailto:maryj.kamunya2@gmail.com">Contact</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
